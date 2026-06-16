@@ -312,6 +312,17 @@
       margin-bottom: 18px;
     }
 
+    .bookmark-note {
+      background: #f8efe4;
+      border: 2px solid rgba(143, 160, 121, 0.45);
+      border-radius: 18px;
+      padding: 14px 16px;
+      margin: 16px 0 20px;
+      color: var(--ink);
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
     .coupon-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -346,6 +357,7 @@
       font-size: 22px;
       font-weight: 900;
       margin-bottom: 8px;
+      padding-right: 92px;
     }
 
     .coupon-description {
@@ -382,16 +394,109 @@
     .coupon.redeemed::after {
       content: "REDEEMED";
       position: absolute;
-      right: -28px;
-      top: 18px;
-      transform: rotate(28deg);
-      background: rgba(111, 143, 95, 0.16);
+      right: 14px;
+      top: 14px;
+      background: rgba(111, 143, 95, 0.14);
       color: var(--success);
       border: 2px solid rgba(111, 143, 95, 0.45);
-      padding: 6px 32px;
-      font-size: 11px;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 10px;
       font-weight: 900;
-      letter-spacing: 1.5px;
+      letter-spacing: 1.2px;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(63, 58, 49, 0.48);
+      z-index: 50;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      animation: fadeIn 0.18s ease;
+    }
+
+    .modal-card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--cream);
+      border: 3px solid var(--pink);
+      border-radius: 26px;
+      padding: 24px;
+      box-shadow: 0 20px 55px rgba(63, 58, 49, 0.35);
+      text-align: center;
+      animation: modalPop 0.22s ease;
+    }
+
+    .modal-badge {
+      display: inline-block;
+      background: var(--cream-dark);
+      border: 2px solid rgba(232, 169, 184, 0.75);
+      color: var(--pink-dark);
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 11px;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .modal-card h2 {
+      margin: 0 0 10px;
+      font-size: 28px;
+    }
+
+    .modal-card p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 16px;
+    }
+
+    .modal-coupon-name {
+      background: #f8efe4;
+      border-radius: 16px;
+      padding: 14px;
+      margin: 16px 0;
+      font-weight: 900;
+      color: var(--ink);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .modal-actions button {
+      flex: 1;
+      font-size: 14px;
+      padding: 12px 14px;
+    }
+
+    .cancel-button {
+      background: var(--cream-dark);
+      color: var(--ink);
+      box-shadow: none;
+    }
+
+    .cancel-button:hover {
+      background: #ead8c5;
+    }
+
+    .confirm-button {
+      background: var(--success);
+    }
+
+    .confirm-button:hover {
+      background: #5d7d4f;
     }
 
     .footer-code {
@@ -416,6 +521,28 @@
       }
     }
 
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes modalPop {
+      from {
+        opacity: 0;
+        transform: scale(0.96) translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
     @media (max-width: 650px) {
       body {
         padding: 14px;
@@ -436,6 +563,10 @@
         width: 78px;
         height: 78px;
         font-size: 10px;
+      }
+
+      .modal-actions {
+        flex-direction: column;
       }
     }
   </style>
@@ -549,15 +680,19 @@
           </p>
 
           <p class="signature">
-            Certified with love by Stinky <3
+            Certified with love by Stinky &lt;3
           </p>
 
           <section class="coupons-section">
             <h2>Redeemable Stinky Coupons</h2>
 
             <p class="coupons-intro">
-              Each coupon can be redeemed one time. Final authorization is required.
+              Each coupon can be redeemed one time. Final authorization is required before a coupon is marked as used.
             </p>
+
+            <div class="bookmark-note">
+              Bookmark this page so you can come back and redeem these later.
+            </div>
 
             <div id="couponGrid" class="coupon-grid"></div>
           </section>
@@ -570,8 +705,28 @@
     </section>
   </main>
 
+  <div id="redeemModal" class="modal-overlay" onclick="closeModalFromBackground(event)">
+    <div class="modal-card">
+      <div class="modal-badge">Final Authorization Required</div>
+
+      <h2>Redeem Coupon?</h2>
+
+      <p>
+        This coupon can only be redeemed once. Once confirmed, the redemption date will be saved.
+      </p>
+
+      <div id="modalCouponName" class="modal-coupon-name"></div>
+
+      <div class="modal-actions">
+        <button class="cancel-button" onclick="closeRedeemModal()">Cancel</button>
+        <button class="confirm-button" onclick="confirmCouponRedemption()">Confirm Redemption</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const correctPassword = "urbuttsmells";
+    let pendingCouponId = null;
 
     const coupons = [
       {
@@ -666,7 +821,7 @@
       return localStorage.getItem(getCouponStorageKey(couponId));
     }
 
-    function redeemCoupon(couponId) {
+    function openRedeemModal(couponId) {
       const coupon = coupons.find(item => item.id === couponId);
 
       if (!coupon) {
@@ -676,25 +831,38 @@
       const alreadyRedeemed = getRedeemedDate(couponId);
 
       if (alreadyRedeemed) {
-        alert("This coupon was already redeemed on " + alreadyRedeemed + ".");
         return;
       }
 
-      const confirmed = confirm(
-        "Final authorization required.\n\n" +
-        "Redeeming this coupon will permanently mark it as used on this device.\n\n" +
-        coupon.number + " — " + coupon.title + "\n\n" +
-        "Proceed?"
-      );
+      pendingCouponId = couponId;
 
-      if (!confirmed) {
+      document.getElementById("modalCouponName").textContent =
+        coupon.number + " — " + coupon.title;
+
+      document.getElementById("redeemModal").classList.add("active");
+    }
+
+    function closeRedeemModal() {
+      pendingCouponId = null;
+      document.getElementById("redeemModal").classList.remove("active");
+    }
+
+    function closeModalFromBackground(event) {
+      if (event.target.id === "redeemModal") {
+        closeRedeemModal();
+      }
+    }
+
+    function confirmCouponRedemption() {
+      if (!pendingCouponId) {
         return;
       }
 
       const redeemedDate = getTodayDate();
 
-      localStorage.setItem(getCouponStorageKey(couponId), redeemedDate);
+      localStorage.setItem(getCouponStorageKey(pendingCouponId), redeemedDate);
 
+      closeRedeemModal();
       renderCoupons();
     }
 
@@ -713,7 +881,7 @@
           <div class="coupon-number">${coupon.number}</div>
           <div class="coupon-title">${coupon.title}</div>
           <div class="coupon-description">${coupon.description}</div>
-          <button class="redeem-button" onclick="redeemCoupon('${coupon.id}')">
+          <button class="redeem-button" onclick="openRedeemModal('${coupon.id}')">
             Redeem Coupon
           </button>
           <div class="redeemed-stamp">
