@@ -120,6 +120,8 @@
       color: var(--muted);
       margin: 0 0 28px;
       line-height: 1.5;
+      font-weight: 800;
+      letter-spacing: 1px;
     }
 
     .status-box {
@@ -212,12 +214,19 @@
       padding: 13px 22px;
       cursor: pointer;
       box-shadow: 0 8px 18px rgba(201, 120, 142, 0.28);
-      transition: transform 0.15s ease, background 0.15s ease;
+      transition: transform 0.15s ease, background 0.15s ease, opacity 0.15s ease;
     }
 
     button:hover {
       background: var(--pink-dark);
       transform: translateY(-1px);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+      transform: none;
+      box-shadow: none;
     }
 
     .password-area {
@@ -291,6 +300,100 @@
       color: var(--pink-dark);
     }
 
+    .coupons-section {
+      margin-top: 30px;
+      padding-top: 28px;
+      border-top: 2px dashed rgba(232, 169, 184, 0.85);
+    }
+
+    .coupons-intro {
+      color: var(--muted);
+      font-size: 16px;
+      margin-bottom: 18px;
+    }
+
+    .coupon-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .coupon {
+      background: #fff7ee;
+      border: 2px solid rgba(232, 169, 184, 0.75);
+      border-radius: 22px;
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .coupon.redeemed {
+      background: #f1eadf;
+      border-color: rgba(111, 143, 95, 0.65);
+    }
+
+    .coupon-number {
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--pink-dark);
+      margin-bottom: 8px;
+    }
+
+    .coupon-title {
+      font-size: 22px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .coupon-description {
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+
+    .coupon button {
+      width: 100%;
+      padding: 11px 16px;
+      font-size: 14px;
+    }
+
+    .redeemed-stamp {
+      display: none;
+      margin-top: 12px;
+      color: var(--success);
+      font-weight: 900;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .coupon.redeemed .redeemed-stamp {
+      display: block;
+    }
+
+    .coupon.redeemed .redeem-button {
+      display: none;
+    }
+
+    .coupon.redeemed::after {
+      content: "REDEEMED";
+      position: absolute;
+      right: -28px;
+      top: 18px;
+      transform: rotate(28deg);
+      background: rgba(111, 143, 95, 0.16);
+      color: var(--success);
+      border: 2px solid rgba(111, 143, 95, 0.45);
+      padding: 6px 32px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+    }
+
     .footer-code {
       margin-top: 24px;
       text-align: center;
@@ -324,7 +427,8 @@
         border-radius: 24px;
       }
 
-      .info-grid {
+      .info-grid,
+      .coupon-grid {
         grid-template-columns: 1fr;
       }
 
@@ -347,6 +451,7 @@
         </div>
 
         <h1>DA BEANS BLIND BOX</h1>
+
         <p class="subtitle">
           OFFICIAL AUTHENTICATION RECORD
         </p>
@@ -356,8 +461,9 @@
             <span class="status-dot"></span>
             Authentication Verified
           </div>
+
           <div>
-            scan has been comfirmed
+            Scan has been confirmed.
           </div>
         </div>
 
@@ -387,6 +493,7 @@
 
         <section class="classified">
           <h2>Classified Birthday File</h2>
+
           <p>
             This file is locked. Authorized stinky personnel only.
           </p>
@@ -416,33 +523,44 @@
           <h2>Birthday File Unlocked</h2>
 
           <p>
-  HAPPY BIRTHDAY BABE 
-</p>
-
-<p>
-  This whole blind box series was made just for you because you deserve something that feels cute,
-  weird, thoughtful, and completely yours.
-</p>
-
-<p>
-  I had a lot of fun making this for you, not just because it was a cute birthday idea,
-  but because I loved getting to put time into something that could make you smile.
-  Every part of this was made with you in mind.
-</p>
-
-<p>
-  I love you so much and I appreciate you more than I probably say enough. I am really
-  grateful for you, for us, and for everything we are building together. I want to keep
-  making communication a priority, keep growing with you, and keep choosing each other
-  even when life feels busy or complicated.
-</p>
-
-<p>
-  I am excited for our future, and I hope this box reminds you how loved you are.
-</p>
-          <p class="signature">
-            Certified with love by Stinky <3
+            HAPPY BIRTHDAY BABE
           </p>
+
+          <p>
+            This whole blind box series was made just for you because you deserve something that feels cute,
+            weird, thoughtful, and completely yours.
+          </p>
+
+          <p>
+            I had a lot of fun making this for you, not just because it was a cute birthday idea,
+            but because I loved getting to put time into something that could make you smile.
+            Every part of this was made with you in mind.
+          </p>
+
+          <p>
+            I love you so much and I appreciate you more than I probably say enough. I am really
+            grateful for you, for us, and for everything we are building together. I want to keep
+            making communication a priority, keep growing with you, and keep choosing each other
+            even when life feels busy or complicated.
+          </p>
+
+          <p>
+            I am excited for our future, and I hope this box reminds you how loved you are.
+          </p>
+
+          <p class="signature">
+            Certified with love by Stinky &lt;3
+          </p>
+
+          <section class="coupons-section">
+            <h2>Redeemable Stinky Coupons</h2>
+
+            <p class="coupons-intro">
+              Each coupon can be redeemed one time. Final authorization is required.
+            </p>
+
+            <div id="couponGrid" class="coupon-grid"></div>
+          </section>
         </section>
 
         <div class="footer-code">
@@ -454,6 +572,45 @@
 
   <script>
     const correctPassword = "urbuttsmells";
+
+    const coupons = [
+      {
+        id: "planned_date",
+        number: "Coupon 001",
+        title: "Planned Date",
+        description: "I plan the whole thing. You just show up cute."
+      },
+      {
+        id: "cozy_night_in",
+        number: "Coupon 002",
+        title: "Cozy Night In",
+        description: "Movie, snacks, blanket, and no responsibilities allowed."
+      },
+      {
+        id: "boba_run",
+        number: "Coupon 003",
+        title: "Boba Run",
+        description: "Redeemable for one boba trip whenever the craving hits."
+      },
+      {
+        id: "emergency_comfort_night",
+        number: "Coupon 004",
+        title: "Emergency Comfort Night",
+        description: "For when life is too much and you just need love, food, and attention."
+      },
+      {
+        id: "back_rub",
+        number: "Coupon 005",
+        title: "No-Questions-Asked Back Rub",
+        description: "Valid when tired, grumpy, dramatic, or simply stinky."
+      },
+      {
+        id: "i_miss_you_visit",
+        number: "Coupon 006",
+        title: "I Miss You Visit",
+        description: "Redeemable when you want extra time together. I will make it happen."
+      }
+    ];
 
     function showPasswordBox() {
       const passwordArea = document.getElementById("passwordArea");
@@ -476,6 +633,7 @@
       if (enteredPassword === correctPassword) {
         errorMessage.classList.remove("active");
         secretMessage.classList.add("active");
+        renderCoupons();
         secretMessage.scrollIntoView({ behavior: "smooth", block: "start" });
       } else {
         errorMessage.classList.add("active");
@@ -488,6 +646,83 @@
       if (event.key === "Enter") {
         checkPassword();
       }
+    }
+
+    function getCouponStorageKey(couponId) {
+      return "daBeansCoupon_" + couponId;
+    }
+
+    function getTodayDate() {
+      const today = new Date();
+
+      return today.toLocaleDateString("en-US", {
+        month: "2-digit",
+        day: "2-digit",
+        year: "numeric"
+      });
+    }
+
+    function getRedeemedDate(couponId) {
+      return localStorage.getItem(getCouponStorageKey(couponId));
+    }
+
+    function redeemCoupon(couponId) {
+      const coupon = coupons.find(item => item.id === couponId);
+
+      if (!coupon) {
+        return;
+      }
+
+      const alreadyRedeemed = getRedeemedDate(couponId);
+
+      if (alreadyRedeemed) {
+        alert("This coupon was already redeemed on " + alreadyRedeemed + ".");
+        return;
+      }
+
+      const confirmed = confirm(
+        "Final authorization required.\n\n" +
+        "Redeeming this coupon will permanently mark it as used on this device.\n\n" +
+        coupon.number + " — " + coupon.title + "\n\n" +
+        "Proceed?"
+      );
+
+      if (!confirmed) {
+        return;
+      }
+
+      const redeemedDate = getTodayDate();
+
+      localStorage.setItem(getCouponStorageKey(couponId), redeemedDate);
+
+      renderCoupons();
+    }
+
+    function renderCoupons() {
+      const couponGrid = document.getElementById("couponGrid");
+
+      couponGrid.innerHTML = "";
+
+      coupons.forEach(coupon => {
+        const redeemedDate = getRedeemedDate(coupon.id);
+        const couponCard = document.createElement("div");
+
+        couponCard.className = redeemedDate ? "coupon redeemed" : "coupon";
+
+        couponCard.innerHTML = `
+          <div class="coupon-number">${coupon.number}</div>
+          <div class="coupon-title">${coupon.title}</div>
+          <div class="coupon-description">${coupon.description}</div>
+          <button class="redeem-button" onclick="redeemCoupon('${coupon.id}')">
+            Redeem Coupon
+          </button>
+          <div class="redeemed-stamp">
+            Redeemed on ${redeemedDate || ""}
+          </div>
+        `;
+
+        couponGrid.appendChild(couponCard);
+      });
     }
   </script>
 </body>
